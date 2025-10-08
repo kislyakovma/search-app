@@ -1,9 +1,10 @@
 import { GET } from '@/app/api/search/route';
-import { NextRequest } from 'next/server';
 
 describe('/api/search', () => {
   it('should return empty results when no query provided', async () => {
-    const request = new NextRequest('http://localhost:3000/api/search');
+    const request = {
+      url: 'http://localhost:3000/api/search'
+    } as any;
     const response = await GET(request);
     const data = await response.json();
 
@@ -14,7 +15,9 @@ describe('/api/search', () => {
   });
 
   it('should return search results for valid query', async () => {
-    const request = new NextRequest('http://localhost:3000/api/search?q=react');
+    const request = {
+      url: 'http://localhost:3000/api/search?q=react'
+    } as any;
     const response = await GET(request);
     const data = await response.json();
 
@@ -26,7 +29,9 @@ describe('/api/search', () => {
   });
 
   it('should filter results by title', async () => {
-    const request = new NextRequest('http://localhost:3000/api/search?q=React');
+    const request = {
+      url: 'http://localhost:3000/api/search?q=React'
+    } as any;
     const response = await GET(request);
     const data = await response.json();
 
@@ -39,7 +44,9 @@ describe('/api/search', () => {
   });
 
   it('should filter results by description', async () => {
-    const request = new NextRequest('http://localhost:3000/api/search?q=documentation');
+    const request = {
+      url: 'http://localhost:3000/api/search?q=documentation'
+    } as any;
     const response = await GET(request);
     const data = await response.json();
 
@@ -52,7 +59,9 @@ describe('/api/search', () => {
   });
 
   it('should return empty results for non-matching query', async () => {
-    const request = new NextRequest('http://localhost:3000/api/search?q=xyz123nonexistent');
+    const request = {
+      url: 'http://localhost:3000/api/search?q=xyz123nonexistent'
+    } as any;
     const response = await GET(request);
     const data = await response.json();
 
@@ -62,8 +71,12 @@ describe('/api/search', () => {
   });
 
   it('should be case insensitive', async () => {
-    const request1 = new NextRequest('http://localhost:3000/api/search?q=react');
-    const request2 = new NextRequest('http://localhost:3000/api/search?q=REACT');
+    const request1 = {
+      url: 'http://localhost:3000/api/search?q=react'
+    } as any;
+    const request2 = {
+      url: 'http://localhost:3000/api/search?q=REACT'
+    } as any;
     
     const response1 = await GET(request1);
     const response2 = await GET(request2);

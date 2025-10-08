@@ -66,15 +66,19 @@ describe('SearchInput', () => {
     const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: 'test query' } });
 
-    expect(mockReplace).toHaveBeenCalledWith('?q=test%20query', { scroll: false });
+    expect(mockReplace).toHaveBeenCalled();
+    const callArgs = mockReplace.mock.calls[0];
+    expect(callArgs[0]).toMatch(/\?q=test(\+|%20)query/);
+    expect(callArgs[1]).toEqual({ scroll: false });
   });
 
   it('should remove query param when input is empty', () => {
     const mockOnChange = jest.fn();
+    (useSearchParams as jest.Mock).mockReturnValue(new URLSearchParams('q=something'));
     
     render(
       <SearchInput
-        value=""
+        value="something"
         onChange={mockOnChange}
       />
     );

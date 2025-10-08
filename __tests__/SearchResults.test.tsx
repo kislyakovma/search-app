@@ -31,7 +31,7 @@ describe('SearchResults', () => {
       />
     );
 
-    expect(screen.getByText('Searching...')).toBeInTheDocument();
+    expect(screen.getByText('Поиск...')).toBeInTheDocument();
   });
 
   it('should show error state', () => {
@@ -45,7 +45,7 @@ describe('SearchResults', () => {
       />
     );
 
-    expect(screen.getByText('Search Error')).toBeInTheDocument();
+    expect(screen.getByText('Ошибка')).toBeInTheDocument();
     expect(screen.getByText('Network error')).toBeInTheDocument();
   });
 
@@ -60,7 +60,7 @@ describe('SearchResults', () => {
       />
     );
 
-    expect(screen.getByText('Enter a search term to get started')).toBeInTheDocument();
+    expect(screen.getByText('Введите запрос')).toBeInTheDocument();
   });
 
   it('should show no results state', () => {
@@ -74,8 +74,8 @@ describe('SearchResults', () => {
       />
     );
 
-    expect(screen.getByText('No results found')).toBeInTheDocument();
-    expect(screen.getByText('Try different keywords or check your spelling')).toBeInTheDocument();
+    expect(screen.getByText('Ничего не найдено')).toBeInTheDocument();
+    expect(screen.getByText('Попробуйте другой запрос')).toBeInTheDocument();
   });
 
   it('should display search results', () => {
@@ -89,7 +89,7 @@ describe('SearchResults', () => {
       />
     );
 
-    expect(screen.getByText('Found 2 results for "test"')).toBeInTheDocument();
+    expect(screen.getByText(/Найдено 2 результата по запросу "test"/)).toBeInTheDocument();
     expect(screen.getByText('Test Result 1')).toBeInTheDocument();
     expect(screen.getByText('Test Result 2')).toBeInTheDocument();
     expect(screen.getByText('This is a test description')).toBeInTheDocument();
@@ -107,7 +107,7 @@ describe('SearchResults', () => {
       />
     );
 
-    expect(screen.getByText('Found 1 result for "test"')).toBeInTheDocument();
+    expect(screen.getByText(/Найдено 1 результат по запросу "test"/)).toBeInTheDocument();
   });
 
   it('should render result links with correct attributes', () => {

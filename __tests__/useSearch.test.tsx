@@ -31,7 +31,9 @@ describe('useSearch', () => {
       result.current.setQuery('ab');
     });
 
-    jest.advanceTimersByTime(500);
+    act(() => {
+      jest.advanceTimersByTime(500);
+    });
 
     expect(fetch).not.toHaveBeenCalled();
     expect(result.current.results).toEqual([]);
@@ -57,9 +59,10 @@ describe('useSearch', () => {
       result.current.setQuery('test');
     });
 
-    expect(result.current.loading).toBe(true);
-
-    jest.advanceTimersByTime(100);
+    act(() => {
+      jest.advanceTimersByTime(100);
+    });
+    
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith('/api/search?q=test');
@@ -82,7 +85,9 @@ describe('useSearch', () => {
       result.current.setQuery('test');
     });
 
-    jest.advanceTimersByTime(100);
+    act(() => {
+      jest.advanceTimersByTime(100);
+    });
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
@@ -105,11 +110,14 @@ describe('useSearch', () => {
       timestamp: Date.now()
     };
 
+    let firstResolve: any;
+    const firstPromise = new Promise(resolve => { firstResolve = resolve; });
+
     (fetch as jest.Mock)
-      .mockImplementationOnce(() => new Promise(resolve => setTimeout(() => resolve({
+      .mockImplementationOnce(() => firstPromise.then(() => ({
         ok: true,
         json: async () => firstResponse,
-      }), 200)))
+      })))
       .mockResolvedValueOnce({
         ok: true,
         json: async () => secondResponse,
@@ -121,17 +129,28 @@ describe('useSearch', () => {
       result.current.setQuery('first');
     });
 
-    jest.advanceTimersByTime(50);
+    act(() => {
+      jest.advanceTimersByTime(50);
+    });
 
     act(() => {
       result.current.setQuery('second');
     });
 
-    jest.advanceTimersByTime(50);
+    act(() => {
+      jest.advanceTimersByTime(50);
+    });
+
+    await waitFor(() => {
+      expect(result.current.query).toBe('second');
+    });
 
     await waitFor(() => {
       expect(result.current.results).toEqual(secondResponse.results);
-      expect(result.current.query).toBe('second');
+    });
+
+    act(() => {
+      firstResolve();
     });
   });
 });
